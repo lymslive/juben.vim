@@ -1,3 +1,8 @@
+VIMDIR ?= juben.vim
+STATS = $(VIMDIR)/stats.vim
+TOHTML = $(VIMDIR)tohtml
+HTML_DEP = $(TOHTML) $(VIMDIR)/juben.html
+
 .PHONY: all help stats html
 
 all: stats html
@@ -8,10 +13,10 @@ help:
 
 stats: stats.md
 
-stats.md: main.md
-	vim -E -s -c "source .vim/stats.vim" -cxall main.md
+stats.md: main.md $(STATS)
+	vim -E -s -c "source $(STATS)" -cxall main.md
 
 html: main.html
 
-main.html: main.md .vim/tohtml.vim .vim/juben.html
-	vim -E -s -c "source .vim/tohtml.vim" -cxall main.md
+main.html: main.md $(HTML_DEP)
+	vim -E -s -c "source $(TOHTML)" -cxall main.md
