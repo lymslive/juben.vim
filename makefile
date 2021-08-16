@@ -1,6 +1,6 @@
 VIMDIR ?= juben.vim
 STATS = $(VIMDIR)/stats.vim
-TOHTML = $(VIMDIR)tohtml
+TOHTML = $(VIMDIR)/tohtml.vim
 HTML_DEP = $(TOHTML) $(VIMDIR)/juben.html
 
 .PHONY: all help stats html

@@ -92,13 +92,17 @@ function! s:class.deal_section(text) dict abort
         return v:false
     endif
     let l:section = l:lsMatch[1]
-    let l:secNo = substitute(l:section, '\d\+\zs\s*', '', '')
-    let l:html = printf('<a name="s%d"></a>', l:secNo)
-    call add(self.html, l:html)
+    let l:secNo = substitute(l:section, '^\d\+\zs\s*', '', '')
+    if l:secNo =~# '^\d\+'
+        let l:html = printf('<a name="s%d"></a>', l:secNo)
+        call add(self.html, l:html)
+    endif
     let l:html = printf('<h2 class="%s">%s</h2>', s:style.section, l:section)
     call add(self.html, l:html)
-    let l:html = printf('<a href="#s%d">%d</a>', l:secNo, l:secNo)
-    call add(self.hnav, l:html)
+    if l:secNo =~# '^\d\+'
+        let l:html = printf('<a href="#s%d">%d</a>', l:secNo, l:secNo)
+        call add(self.hnav, l:html)
+    endif
     let self.state = s:style.section
     return v:true
 endfunction
