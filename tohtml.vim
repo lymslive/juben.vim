@@ -61,7 +61,7 @@ function! s:class.run() dict abort
         elseif l:sLine =~# '^\s*.\+：.\+'
             call self.deal_line(l:sLine)
         else
-            call add(self.html, l:sLine)
+            call self.deal_paragraph(l:sLine)
         endif
     endwhile
     call self.post_run()
@@ -154,6 +154,14 @@ function! s:class.join_paragraph(text) dict abort
     return l:paragraph
 endfunction
 
+" Method: deal_paragraph 
+" 普通段落
+function! s:class.deal_paragraph(text) dict abort
+    let l:paragraph = self.join_paragraph(a:text)
+    call add(self.html, '<p>')
+    call add(self.html, l:paragraph)
+endfunction
+
 " Method: deal_show 
 " （行外描叙
 function! s:class.deal_show(text) dict abort
@@ -189,17 +197,17 @@ function! s:class.render() dict abort
         if l:line =~? '{vim:main}'
             call extend(l:html, self.html)
             continue
-        endif
-        if l:line =~? '{vim:navigator}'
+        elseif l:line =~? '{vim:navigator}'
             call extend(l:html, self.hnav)
             continue
         endif
+
         if l:line =~? '{vim:title}'
             let l:line = substitute(l:line, '{vim:title}', self.title, '')
-        endif
-        if l:line =~? '{vim:home}'
+        elseif l:line =~? '{vim:home}'
             let l:line = substitute(l:line, '{vim:home}', self.home, '')
         endif
+
         call add(l:html, l:line)
     endfor
     let self.html = l:html
